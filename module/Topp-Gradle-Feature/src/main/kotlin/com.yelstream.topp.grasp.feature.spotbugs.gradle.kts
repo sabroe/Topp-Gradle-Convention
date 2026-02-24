@@ -1,6 +1,6 @@
 /*
- * Project: Topp Gradle Convention
- * GitHub: https://github.com/sabroe/Topp-Gradle-Convention
+ * Project: Topp Grasp
+ * GitHub: https://github.com/sabroe/Topp-Grasp
  *
  * Copyright 2022-2026 Morten Sabroe Mortensen
  *
@@ -17,8 +17,18 @@
  * limitations under the License.
  */
 
-rootProject.name = "Yelstream-Topp-Gradle-Convention"
+plugins {
+    id("com.github.spotbugs-base")  //Reference: https://plugins.gradle.org/plugin/com.github.spotbugs-base
+}
 
-enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
 
-includeBuild("module/Topp-Gradle-Feature")
+//    effort.set(com.github.spotbugs.snom.effort.Effort.MAX)
+}
+
+dependencies {
+    spotbugs("com.github.spotbugs:spotbugs:4.9.8")
+}

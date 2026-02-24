@@ -1,6 +1,6 @@
 /*
- * Project: Topp Gradle Convention
- * GitHub: https://github.com/sabroe/Topp-Gradle-Convention
+ * Project: Topp Grasp
+ * GitHub: https://github.com/sabroe/Topp-Grasp
  *
  * Copyright 2022-2026 Morten Sabroe Mortensen
  *
@@ -17,8 +17,18 @@
  * limitations under the License.
  */
 
-rootProject.name = "Yelstream-Topp-Gradle-Convention"
+/*
+ * "Root Project" convention plugin.
+ *
+ * @author Morten Sabroe Mortensen
+ * @version 1.0
+ * @since 2025-12-20
+ */
 
-enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+plugins {
+    id("project-report")  //See https://docs.gradle.org/current/userguide/project_report_plugin.html
+    id("com.dorongold.task-tree")  //See https://github.com/dorongold/gradle-task-tree
 
-includeBuild("module/Topp-Gradle-Feature")
+
+//    id("convention.conservative")
+}

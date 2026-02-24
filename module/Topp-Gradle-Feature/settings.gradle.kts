@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-rootProject.name = "Yelstream-Topp-Gradle-Convention"
+rootProject.name = "Yelstream-Topp-Gradle-Feature"
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
-
-includeBuild("module/Topp-Gradle-Feature")
