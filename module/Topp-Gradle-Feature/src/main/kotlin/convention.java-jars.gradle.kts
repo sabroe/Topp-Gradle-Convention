@@ -33,7 +33,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.kotlin.dsl.the
 
 plugins {
-    id("java") apply false
+    id("java")
 }
 
 val conventionName = "java-jars"

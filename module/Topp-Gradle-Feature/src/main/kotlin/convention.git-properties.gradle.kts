@@ -29,8 +29,8 @@ import com.gorylenko.GitPropertiesPluginExtension
 import org.gradle.api.plugins.JavaPlugin
 
 plugins {
-    id("java") apply false
-    id("com.gorylenko.gradle-git-properties") apply false
+    id("java")
+    id("com.gorylenko.gradle-git-properties")
 }
 
 val conventionName = "git-properties"

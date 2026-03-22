@@ -29,7 +29,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 
 plugins {
-    id("java-library") apply false  //Note: Required for type-safe dependency accessors!
+    id("java-library")  //Note: Required for type-safe dependency accessors!
 }
 
 val conventionName = "slf4j"

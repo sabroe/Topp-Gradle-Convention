@@ -29,8 +29,8 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 
 plugins {
-    id("java") apply false
-    id("de.obqo.decycle") apply false
+    id("java")
+    id("de.obqo.decycle")
 }
 
 val conventionName = "decycle"

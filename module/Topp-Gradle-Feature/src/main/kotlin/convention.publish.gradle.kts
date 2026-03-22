@@ -35,9 +35,9 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.kotlin.dsl.apply
 
 plugins {
-    id("java") apply false
-//    id 'maven-publish' apply false
-//    id 'signing' apply false
+    id("java")
+//    id 'maven-publish'
+//    id 'signing'
 }
 
 val conventionName = "lombok"

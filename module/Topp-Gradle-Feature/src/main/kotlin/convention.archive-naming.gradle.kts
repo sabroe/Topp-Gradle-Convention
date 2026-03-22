@@ -32,9 +32,9 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
 plugins {
-    id("java") apply false
-    id("base") apply false                 // Needed for BasePlugin and archivesName
-    id("java-library-distribution") apply false  // Needed for distribution extension
+    id("java")
+    id("base")                       // Needed for BasePlugin and archivesName
+    id("java-library-distribution")  // Needed for distribution extension
 }
 
 val conventionName = "archive-naming"

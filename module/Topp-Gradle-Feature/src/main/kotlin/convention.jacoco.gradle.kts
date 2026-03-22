@@ -29,8 +29,8 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 
 plugins {
-    id("java") apply false
-    id("jacoco") apply false
+    id("java")
+    id("jacoco")
 }
 
 val conventionName = "jacoco"
@@ -48,7 +48,7 @@ project.plugins.withType<JavaPlugin> {
         apply(plugin = "jacoco")
 
         extensions.configure<JacocoPluginExtension> {
-            toolVersion = "0.8.13"  // Latest stable as of December 2025
+            toolVersion = "0.8.14"  // Latest stable as of March 2026
         }
 
         //Ensure the test task generates the report after running:

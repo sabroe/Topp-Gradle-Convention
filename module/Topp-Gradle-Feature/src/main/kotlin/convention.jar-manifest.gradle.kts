@@ -30,7 +30,7 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
-    id("java") apply false
+    id("java")
 }
 
 val conventionName = "jar-manifest"

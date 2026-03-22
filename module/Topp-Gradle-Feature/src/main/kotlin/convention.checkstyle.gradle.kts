@@ -33,8 +33,8 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.withType
 
 plugins {
-    id("java") apply false
-    id("checkstyle") apply false
+    id("java")
+    id("checkstyle")
 }
 
 val conventionName = "checkstyle"

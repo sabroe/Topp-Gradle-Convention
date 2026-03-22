@@ -29,7 +29,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 
 plugins {
-    id("java") apply false  //Note: Required for type-safe dependency accessors!
+    id("java")  //Note: Required for type-safe dependency accessors!
 }
 
 val conventionName = "junit"

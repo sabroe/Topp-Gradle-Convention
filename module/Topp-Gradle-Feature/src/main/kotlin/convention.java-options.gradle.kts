@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets
 
 
 plugins {
-    id("java") apply false
+    id("java")
 }
 
 val conventionName = "java-options"
