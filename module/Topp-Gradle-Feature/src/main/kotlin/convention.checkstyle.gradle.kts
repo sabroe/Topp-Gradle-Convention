@@ -54,7 +54,8 @@ project.plugins.withType<JavaPlugin> {
         val sourceSets = extensions.getByType(SourceSetContainer::class.java)
 
         extensions.configure<CheckstyleExtension> {
-            toolVersion = "12.3.0"  //See https://checkstyle.sourceforge.io/releasenotes.html
+//            toolVersion = "12.3.0"  //See https://checkstyle.sourceforge.io/releasenotes.html
+            toolVersion = "13.6.0"  //See https://checkstyle.sourceforge.io/releasenotes.html
 
             config = resources.text.fromFile(rootProject.file("config/checkstyle/Yelstream/checkstyle.xml"))
 
