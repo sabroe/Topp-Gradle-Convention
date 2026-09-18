@@ -45,7 +45,7 @@ project.plugins.withType<JavaPlugin> {
         project.logger.debug("Convention ${conventionName} enabled.")
 
         dependencies {
-            val lombokVersion = "1.18.42"
+            val lombokVersion = "1.18.48"
             val lombokDependency = "org.projectlombok:lombok:${lombokVersion}"
 
             compileOnly(lombokDependency)

@@ -40,7 +40,7 @@ plugins {
 //    id 'signing'
 }
 
-val conventionName = "lombok"
+val conventionName = "publish"
 
 project.logger.info("Convention ${conventionName} loaded.")
 

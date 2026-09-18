@@ -53,11 +53,13 @@ project.plugins.withType<JavaPlugin> {
                 logger.debug("Applying 'api' dependencies.")
                 api("org.slf4j:slf4j-api:${slf4jVersion}")
                 api("org.slf4j:slf4j-ext:${slf4jVersion}")
+                api("org.slf4j:slf4j-simple:${slf4jVersion}")
             } else {
                 //Fallback to 'implementation' (implies only java plugin is applied)
                 logger.debug("Applying 'implementation' dependencies.")
                 implementation("org.slf4j:slf4j-api:${slf4jVersion}")
                 implementation("org.slf4j:slf4j-ext:${slf4jVersion}")
+                implementation("org.slf4j:slf4j-simple:${slf4jVersion}")
             }
 
             //Apply testImplementation only for intermediate libraries

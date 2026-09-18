@@ -18,7 +18,7 @@
  */
 
 /*
- * JAcoco convention plugin.
+ * JaCoCo convention plugin.
  *
  * @author Morten Sabroe Mortensen
  * @version 1.0
@@ -48,7 +48,7 @@ project.plugins.withType<JavaPlugin> {
         apply(plugin = "jacoco")
 
         extensions.configure<JacocoPluginExtension> {
-            toolVersion = "0.8.14"  // Latest stable as of March 2026
+            toolVersion = "0.8.15"  // Latest stable as of September 2026
         }
 
         //Ensure the test task generates the report after running:
