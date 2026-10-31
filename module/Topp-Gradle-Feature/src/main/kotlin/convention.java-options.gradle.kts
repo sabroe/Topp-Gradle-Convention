@@ -35,7 +35,7 @@ plugins {
 
 val conventionName = "java-options"
 
-project.logger.info("Convention ${conventionName} loaded.")
+    project.logger.info("Convention ${conventionName} loaded.")
 
 
 
@@ -67,19 +67,19 @@ TODO:
 
         plugins.withType<JavaPlugin>().configureEach {
             fun getCustomString(key: String, default: String): String {
-                return (project.properties["custom"] as? Map<*, *>)
+                return (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get(key) as? String
                     ?: default
             }
 
             fun getCustomBoolean(key: String, default: Boolean): Boolean {
-                return (project.properties["custom"] as? Map<*, *>)
+                return (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get(key) as? Boolean
                     ?: default
             }
 
             fun getCustomInt(key: String, default: Int): Int {
-                val value = (project.properties["custom"] as? Map<*, *>)?.get(key)
+                val value = (project.extra.properties["custom"] as? Map<*, *>)?.get(key)
                 return when (value) {
                     is Int -> value
                     is String -> value.toIntOrNull() ?: default
@@ -87,7 +87,7 @@ TODO:
                 }
             }
 
-            val defaultEncoding = (project.properties["custom"] as? Map<*, *>)
+            val defaultEncoding = (project.extra.properties["custom"] as? Map<*, *>)
                 ?.get("java.default-encoding") as? String ?: StandardCharsets.UTF_8.name()
 
             tasks.compileJava {
@@ -99,13 +99,13 @@ TODO:
             }
 
             java {
-                val sourceJavaVersionString = (project.properties["custom"] as? Map<*, *>)
+                val sourceJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get("java.language-version.source") as? String
-                val targetJavaVersionString = (project.properties["custom"] as? Map<*, *>)
+                val targetJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get("java.language-version.target") as? String
-                val toolChainJavaVersionString = (project.properties["custom"] as? Map<*, *>)
+                val toolChainJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get("java.language-version.tool-chain") as? String
-                val javaVersionString = (project.properties["custom"] as? Map<*, *>)
+                val javaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
                     ?.get("java.language-version") as? String
 
                 var resolvedLanguageVersion: JavaLanguageVersion? = null
@@ -144,7 +144,7 @@ TODO:
                 (options as StandardJavadocDocletOptions).apply {
                     encoding = defaultEncoding
 
-                    val custom = project.properties["custom"] as? Map<*, *>
+                    val custom = project.extra.properties["custom"] as? Map<*, *>
 
                     fun customBoolean(key: String, default: Boolean): Boolean =
                         custom?.get(key) as? Boolean ?: default
@@ -176,7 +176,7 @@ TODO:
         }
 
         tasks.withType<JavaCompile>().configureEach {
-            val custom = project.properties["custom"] as? Map<*, *>
+            val custom = project.extra.properties["custom"] as? Map<*, *>
 
             fun Any?.tokenizeWhitespace(): List<String> = this?.toString()?.split("\\s+".toRegex())?.filter { it.isNotEmpty() }.orEmpty()
 

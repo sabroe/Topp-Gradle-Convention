@@ -97,6 +97,22 @@ object FormatProperties {
             }
         }
 
+    /**
+     * Project properties assembled from non-deprecated sources,
+     * replacing the deprecated [Project.getProperties].
+     */
+    private fun projectProperties(project: Project): Map<String, Any?> = buildMap {
+        putAll(project.providers.gradlePropertiesPrefixedBy("").get())  // Gradle properties: gradle.properties, -P, ORG_GRADLE_PROJECT_
+        putAll(project.extensions.extraProperties.properties)           // extra properties, incl. those set by the Cascade plugin
+        put("name", project.name)                                        // explicit core values, as the upgrade guide suggests
+        put("path", project.path)
+        put("group", project.group)
+        put("version", project.version)
+        put("description", project.description)
+        put("projectDir", project.projectDir)
+        put("buildFile", project.buildFile)
+    }
+
     private fun mapAsYaml(
         properties: Map<*, *>,
         title: String,
@@ -181,7 +197,7 @@ object FormatProperties {
         title: String = "All Project Properties",
         includeTypeHints: Boolean = true
     ): String = mapAsYaml(
-        properties = project.properties,
+        properties = projectProperties(project),
         title = title,
         filter = { key -> key != "properties" }, // hide self-reference cycle
         includeTypeHints = includeTypeHints
@@ -207,7 +223,7 @@ object FormatProperties {
         val hideIfContains = setOf("Decorator", "Factory", "Handler", "Container", "Scope", "Broadcaster")
 
         return mapAsYaml(
-            properties = project.properties,
+            properties = projectProperties(project),
             title = title,
             filter = { key ->
                 key !in alwaysHide &&

@@ -55,7 +55,7 @@ project.plugins.withType<JavaPlugin> {
         apply(plugin = "maven-publish")
         apply(plugin = "signing")
 
-        val custom = project.properties["custom"] as? Map<*, *>
+        val custom = project.extra.properties["custom"] as? Map<*, *>
         fun customString(key: String, default: String): String = custom?.get(key)?.toString() ?: default
         fun customBoolean(key: String, default: Boolean): Boolean = custom?.get(key)?.toString()?.trim()?.toBoolean() ?: default
 
