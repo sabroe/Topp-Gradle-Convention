@@ -26,6 +26,9 @@
  */
 
 import com.yelstream.topp.grasp.format.FormatProperties
+import com.yelstream.topp.grasp.util.Projects.booleanProperty
+import com.yelstream.topp.grasp.util.Projects.listProperty
+import com.yelstream.topp.grasp.util.Projects.stringProperty
 import java.nio.charset.StandardCharsets
 
 
@@ -66,29 +69,7 @@ TODO:
  */
 
         plugins.withType<JavaPlugin>().configureEach {
-            fun getCustomString(key: String, default: String): String {
-                return (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get(key) as? String
-                    ?: default
-            }
-
-            fun getCustomBoolean(key: String, default: Boolean): Boolean {
-                return (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get(key) as? Boolean
-                    ?: default
-            }
-
-            fun getCustomInt(key: String, default: Int): Int {
-                val value = (project.extra.properties["custom"] as? Map<*, *>)?.get(key)
-                return when (value) {
-                    is Int -> value
-                    is String -> value.toIntOrNull() ?: default
-                    else -> default
-                }
-            }
-
-            val defaultEncoding = (project.extra.properties["custom"] as? Map<*, *>)
-                ?.get("java.default-encoding") as? String ?: StandardCharsets.UTF_8.name()
+            val defaultEncoding = project.stringProperty("java.default-encoding", StandardCharsets.UTF_8.name())
 
             tasks.compileJava {
                 options.encoding = defaultEncoding
@@ -99,14 +80,10 @@ TODO:
             }
 
             java {
-                val sourceJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get("java.language-version.source") as? String
-                val targetJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get("java.language-version.target") as? String
-                val toolChainJavaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get("java.language-version.tool-chain") as? String
-                val javaVersionString = (project.extra.properties["custom"] as? Map<*, *>)
-                    ?.get("java.language-version") as? String
+                val sourceJavaVersionString = project.stringProperty("java.language-version.source")
+                val targetJavaVersionString = project.stringProperty("java.language-version.target")
+                val toolChainJavaVersionString = project.stringProperty("java.language-version.tool-chain")
+                val javaVersionString = project.stringProperty("java.language-version")
 
                 var resolvedLanguageVersion: JavaLanguageVersion? = null
 
@@ -144,13 +121,9 @@ TODO:
                 (options as StandardJavadocDocletOptions).apply {
                     encoding = defaultEncoding
 
-                    val custom = project.extra.properties["custom"] as? Map<*, *>
+                    fun customBoolean(key: String, default: Boolean): Boolean = project.booleanProperty(key, default)
 
-                    fun customBoolean(key: String, default: Boolean): Boolean =
-                        custom?.get(key) as? Boolean ?: default
-
-                    fun customString(key: String, default: String): String =
-                        custom?.get(key)?.toString() ?: default
+                    fun customString(key: String, default: String): String = project.stringProperty(key, default)
 
                     author(customBoolean("javadoc.author", true))
                     version(customBoolean("javadoc.version", true))
@@ -176,12 +149,8 @@ TODO:
         }
 
         tasks.withType<JavaCompile>().configureEach {
-            val custom = project.extra.properties["custom"] as? Map<*, *>
-
-            fun Any?.tokenizeWhitespace(): List<String> = this?.toString()?.split("\\s+".toRegex())?.filter { it.isNotEmpty() }.orEmpty()
-
-            custom?.get("java.compiler.default-args").tokenizeWhitespace().let(options.compilerArgs::addAll)
-            custom?.get("java.compiler.module-specific-args").tokenizeWhitespace().let(options.compilerArgs::addAll)
+            options.compilerArgs.addAll(project.listProperty("java.compiler.default-args"))
+            options.compilerArgs.addAll(project.listProperty("java.compiler.module-specific-args"))
 
             options.javaModuleVersion.set(provider { project.version.toString() })
         }

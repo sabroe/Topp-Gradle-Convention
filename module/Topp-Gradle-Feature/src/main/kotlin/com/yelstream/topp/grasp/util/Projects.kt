@@ -19,6 +19,7 @@
 
 package com.yelstream.topp.grasp.util
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 object Projects {
@@ -64,4 +65,45 @@ object Projects {
         return enabled
     }
 
+    /**
+     * Reads a property by name with [Project.findProperty].
+     * This finds values from `gradle.properties` files, `-P` and values set by the Choreography Cascade plugin,
+     * so a convention works both with and without that plugin.
+     * The value is trimmed, and a blank value counts as unset.
+     */
+    fun Project.stringProperty(key: String): String? =
+        findProperty(key)?.toString()?.trim()?.takeIf { it.isNotEmpty() }
+
+    /**
+     * Reads a string property, see [stringProperty]. Gives [default] when the property is unset or blank.
+     */
+    fun Project.stringProperty(key: String, default: String): String =
+        stringProperty(key) ?: default
+
+    /**
+     * Reads a boolean property, see [stringProperty]. Gives [default] when the property is unset or blank.
+     * @throws GradleException if the value is neither `true` nor `false`.
+     */
+    fun Project.booleanProperty(key: String, default: Boolean): Boolean =
+        stringProperty(key)?.let {
+            it.toBooleanStrictOrNull()
+                ?: throw GradleException("Property '$key' must be 'true' or 'false', was '$it'.")
+        } ?: default
+
+    /**
+     * Reads an integer property, see [stringProperty]. Gives [default] when the property is unset or blank.
+     * @throws GradleException if the value is not an integer.
+     */
+    fun Project.intProperty(key: String, default: Int): Int =
+        stringProperty(key)?.let {
+            it.toIntOrNull()
+                ?: throw GradleException("Property '$key' must be an integer, was '$it'.")
+        } ?: default
+
+    /**
+     * Reads a whitespace-separated property as a list, see [stringProperty].
+     * Gives an empty list when the property is unset or blank.
+     */
+    fun Project.listProperty(key: String): List<String> =
+        stringProperty(key)?.split(Regex("\\s+")).orEmpty()
 }

@@ -25,6 +25,8 @@
  * @since 2025-12-21
  */
 
+import com.yelstream.topp.grasp.util.Projects.booleanProperty
+import com.yelstream.topp.grasp.util.Projects.stringProperty
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.api.publish.PublishingExtension
@@ -55,9 +57,8 @@ project.plugins.withType<JavaPlugin> {
         apply(plugin = "maven-publish")
         apply(plugin = "signing")
 
-        val custom = project.extra.properties["custom"] as? Map<*, *>
-        fun customString(key: String, default: String): String = custom?.get(key)?.toString() ?: default
-        fun customBoolean(key: String, default: Boolean): Boolean = custom?.get(key)?.toString()?.trim()?.toBoolean() ?: default
+        fun customString(key: String, default: String): String = project.stringProperty(key, default)
+        fun customBoolean(key: String, default: Boolean): Boolean = project.booleanProperty(key, default)
 
 
 //https://docs.gradle.org/current/userguide/publishing_maven.html
