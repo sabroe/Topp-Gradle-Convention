@@ -53,9 +53,16 @@ project.plugins.withType<JavaPlugin> {
         project.logger.debug("Convention ${conventionName} enabled.")
 
 //println(formatPropertiesPretty(project.properties, title = "All Project Properties"))
-        val yamlOutput = FormatProperties.propertiesAsCleanYaml(project)
-        println(yamlOutput)
-//        project.logger.lifecycle(yamlOutput)
+        // The property dump is printed on request only, by running this task.
+        // The YAML is computed when the task is configured, which Gradle does only when the task is requested.
+        // So only then does the full set of Gradle properties become a configuration-cache input.
+        // The YAML is stored with the task, so it is printed also when a cache entry is reused.
+        tasks.register("dumpProperties") {
+            group = "help"
+            description = "Prints this project's properties as YAML."
+            val yamlOutput = FormatProperties.propertiesAsCleanYaml(project)
+            doLast { println(yamlOutput) }
+        }
 /*
 TODO:
 -- List containers
