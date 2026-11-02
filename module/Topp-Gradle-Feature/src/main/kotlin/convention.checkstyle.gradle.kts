@@ -34,7 +34,8 @@ import org.gradle.kotlin.dsl.withType
 
 plugins {
     id("java")
-    id("checkstyle")
+    //Note: 'checkstyle' is not applied here, but below, only when 'convention.checkstyle.enable' is true.
+    //      Applied here, its tasks would always run, also with the convention switched off.
 }
 
 val conventionName = "checkstyle"
