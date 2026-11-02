@@ -115,6 +115,21 @@ project.plugins.withType<JavaPlugin> {
 
                 classpath = lombokTool
                 mainClass.set("lombok.launch.Main")
+
+                // Lombok uses 'sun.misc.Unsafe'. From JDK 24, the JVM then prints "WARNING: A terminally deprecated
+                // method in sun.misc.Unsafe has been called" and three more lines, once per module. Compilation
+                // doesn't show it; this task runs Lombok in a JVM of its own, so its output reaches the build log.
+                // The option allows the use without the warning. JDK 23 introduced it, and older JDKs don't
+                // start with an unknown option, so it is only added from JDK 23. A future JDK removes the methods;
+                // then Lombok itself must change.
+                val launcher = javaLauncher
+                jvmArgumentProviders.add(CommandLineArgumentProvider {
+                    if (launcher.get().metadata.languageVersion.canCompileOrRun(23)) {
+                        listOf("--sun-misc-unsafe-memory-access=allow")
+                    } else {
+                        emptyList()
+                    }
+                })
                 argumentProviders.add(CommandLineArgumentProvider {
                     listOf(
                         "delombok",
