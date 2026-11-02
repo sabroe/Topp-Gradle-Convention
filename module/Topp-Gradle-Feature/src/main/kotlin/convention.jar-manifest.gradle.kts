@@ -25,6 +25,7 @@
  * @since 2025-12-16
  */
 
+import com.yelstream.topp.grasp.util.Projects.stringProperty
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
@@ -45,64 +46,43 @@ project.plugins.withType<JavaPlugin> {
     } else {
         project.logger.debug("Convention ${conventionName} enabled.")
 
+        // Read by name with stringProperty, so a blank value counts as unset and the fallback is used.
+        fun value(vararg keys: String, default: () -> String): String =
+            keys.firstNotNullOfOrNull { project.stringProperty(it) } ?: default()
+
         tasks.withType<Jar>().configureEach {
             manifest {
                 attributes(
-                    "Implementation-Title" to (
-                        project.extra.properties["jar.manifest.implementation-title"] as? String ?:
-                        project.extra.properties["implementation.title"] as? String ?:
-                        project.name
-                        ),
-                    "Implementation-Group" to (
-                        project.extra.properties["jar.manifest.implementation-group"] as? String ?:
-                        project.extra.properties["implementation.group"] as? String ?:
-                        project.group.toString()
-                        ),
-                    "Implementation-Version" to (
-                        project.extra.properties["jar.manifest.implementation-version"] as? String ?:
-                        project.extra.properties["implementation.version"] as? String ?:
-                        project.version.toString()
-                        ),
-                    "Implementation-Vendor" to (
-                        project.extra.properties["jar.manifest.implementation-vendor"] as? String ?:
-                        project.extra.properties["implementation.vendor-name"] as? String ?:
-                        "Yelstream"
-                        ),
-                    "Implementation-Build-Date" to (
-                        project.extra.properties["jar.manifest.implementation-build-date"] as? String ?:
-                        project.extra.properties["implementation.build-date"] as? String ?:
-                        project.extra.properties["build-time"] as? String ?:
-                        ""
-                        ),
-                    "Implementation-Java-Language-Version" to (
-                        project.extra.properties["jar.manifest.implementation-java-language-version"] as? String ?:
-                        java.toolchain.languageVersion.map { it.asInt().toString() }.getOrElse("")
-                        ),
-                    "Implementation-Licence" to (
-                        project.extra.properties["jar.manifest.implementation-license"] as? String ?:
-                        project.extra.properties["implementation.license"] as? String ?:
-                        "Apache License 2.0"
-                        ),
-                    "Implementation-Copyright" to (
-                        project.extra.properties["jar.manifest.implementation-copyright"] as? String ?:
-                        project.extra.properties["implementation.copyright"] as? String ?:
-                        "Copyright 2022-2026 Morten Sabroe Mortensen"
-                        ),
-                    "Implementation-Author" to (
-                        project.extra.properties["jar.manifest.implementation-author"] as? String ?:
-                        project.extra.properties["implementation.author"] as? String ?:
-                        "Morten Sabroe Mortensen"
-                        ),
-                    "Implementation-Contact" to (
-                        project.extra.properties["jar.manifest.implementation-contact"] as? String ?:
-                        project.extra.properties["implementation.contact"] as? String ?:
-                        "mailto:morten.sabroe.mortensen@gmail.com"
-                        ),
-                    "Implementation-Comment" to (
-                        project.extra.properties["jar.manifest.implementation-comment"] as? String ?:
-                        project.extra.properties["implementation.comment"] as? String ?:
-                        "Greetings to all!"
-                        )
+                    "Implementation-Title" to
+                        value("jar.manifest.implementation-title", "implementation.title") { project.name },
+                    "Implementation-Group" to
+                        value("jar.manifest.implementation-group", "implementation.group") { project.group.toString() },
+                    "Implementation-Version" to
+                        value("jar.manifest.implementation-version", "implementation.version") { project.version.toString() },
+                    "Implementation-Vendor" to
+                        value("jar.manifest.implementation-vendor", "implementation.vendor-name") { "Yelstream" },
+                    "Implementation-Build-Date" to
+                        value("jar.manifest.implementation-build-date", "implementation.build-date", "build-time") { "" },
+                    // The toolchain version if one is set, otherwise the version the classes are compiled for.
+                    "Implementation-Java-Language-Version" to
+                        value("jar.manifest.implementation-java-language-version") {
+                            java.toolchain.languageVersion.map { it.asInt().toString() }
+                                .getOrElse(java.targetCompatibility.majorVersion)
+                        },
+                    "Implementation-Licence" to
+                        value("jar.manifest.implementation-license", "implementation.license") { "Apache License 2.0" },
+                    "Implementation-Copyright" to
+                        value("jar.manifest.implementation-copyright", "implementation.copyright") {
+                            "Copyright 2022-2026 Morten Sabroe Mortensen"
+                        },
+                    "Implementation-Author" to
+                        value("jar.manifest.implementation-author", "implementation.author") { "Morten Sabroe Mortensen" },
+                    "Implementation-Contact" to
+                        value("jar.manifest.implementation-contact", "implementation.contact") {
+                            "mailto:morten.sabroe.mortensen@gmail.com"
+                        },
+                    "Implementation-Comment" to
+                        value("jar.manifest.implementation-comment", "implementation.comment") { "Greetings to all!" }
                 )
             }
 
