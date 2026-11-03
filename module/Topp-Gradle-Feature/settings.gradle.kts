@@ -20,3 +20,4 @@
 rootProject.name = "Yelstream-Topp-Gradle-Feature"
 
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+enableFeaturePreview("NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS")
