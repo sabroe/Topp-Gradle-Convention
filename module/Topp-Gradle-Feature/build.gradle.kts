@@ -62,7 +62,7 @@ dependencies {
     implementation("com.dorongold.task-tree:com.dorongold.task-tree.gradle.plugin:4.0.2")
     implementation("de.obqo.decycle:de.obqo.decycle.gradle.plugin:1.2.6")
     implementation("com.gorylenko.gradle-git-properties:com.gorylenko.gradle-git-properties.gradle.plugin:2.5.4")
-    implementation("org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin:3.4.1")
+    implementation("org.cyclonedx.bom:org.cyclonedx.bom.gradle.plugin:3.5.1")
     implementation("org.snakeyaml:snakeyaml-engine:3.1.1")
 ////    implementation("me.champeau.includegit:me.champeau.includegit.gradle.plugin:0.3.2")
 }
