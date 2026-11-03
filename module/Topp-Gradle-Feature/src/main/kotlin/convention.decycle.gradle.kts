@@ -25,12 +25,14 @@
  * @since 2025-12-16
  */
 
+import de.obqo.decycle.gradle.DecycleExtension
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.dependencies
 
 plugins {
     id("java")
-    id("de.obqo.decycle")
+    //Note: 'de.obqo.decycle' is not applied here, but below, only when 'convention.decycle.enable' is true.
+    //      Applied here, its tasks would always run, also with the convention switched off.
 }
 
 val conventionName = "decycle"
@@ -47,7 +49,7 @@ project.plugins.withType<JavaPlugin> {
 
         apply(plugin = "de.obqo.decycle")
 
-        decycle {
+        extensions.configure<DecycleExtension> {  //Note: Not 'decycle { }'; that accessor needs the plugin in 'plugins { }'.
             ignoreFailures(false)
             reportsEnabled(true)
 

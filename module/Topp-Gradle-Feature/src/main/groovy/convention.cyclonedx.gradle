@@ -27,16 +27,19 @@
 
 plugins {
     id 'java'
-    id 'org.cyclonedx.bom'  // See https://plugins.gradle.org/plugin/org.cyclonedx.bom
+    //Note: 'org.cyclonedx.bom' is not applied here, but below, only when 'convention.cyclonedx.enable' is true.
+    //      Applied here, its tasks would always exist, also with the convention switched off.
+    //      See https://plugins.gradle.org/plugin/org.cyclonedx.bom
 }
 
 def conventionName = "cyclonedx"
 
 project.logger.info("Convention ${conventionName} loaded.")
 
-project.plugins.withType(JavaPlugin).configureEach {
+project.plugins.withType(JavaPlugin) {  //Note: Not '.configureEach { }'; a plugin can't be applied from within it.
     def enablePropertyName = "convention.${conventionName}.enable"
-    def enable = project.findProperty(enablePropertyName)?.toString()?.trim()?.toBoolean() ?: true
+    def enableText = project.findProperty(enablePropertyName)?.toString()?.trim()
+    def enable = enableText ? enableText.toBoolean() : true  //Note: Not '?.toBoolean() ?: true'; Groovy's '?:' turns false into true.
     if (!enable) {
         project.logger.debug("Convention ${conventionName} disabled.")
     } else {
@@ -67,6 +70,25 @@ project.plugins.withType(JavaPlugin).configureEach {
                 jsonOutput.set(new File(outputDir, "bom.json"))
                 xmlOutput.set(new File(outputDir, "bom.xml"))
             }
+        }
+
+        // Publishes the SBOM with every Maven publication, as '<artifactId>-<version>-cyclonedx.json' and '.xml'.
+        // This depends only on Gradle's 'maven-publish' plugin, not on any publishing convention: whatever creates
+        // a Maven publication, the SBOM is added to it, and signed with it if signing is set up. Without
+        // 'maven-publish', nothing happens. The task runs only when a publication needs its files, not in 'build'.
+        project.plugins.withId("maven-publish") {
+            def bomTask = project.tasks.named("cyclonedxDirectBom")
+            project.extensions.getByType(org.gradle.api.publish.PublishingExtension).publications
+                .withType(org.gradle.api.publish.maven.MavenPublication).configureEach { publication ->
+                    publication.artifact(bomTask.flatMap { it.jsonOutput }) {
+                        classifier = "cyclonedx"
+                        extension = "json"
+                    }
+                    publication.artifact(bomTask.flatMap { it.xmlOutput }) {
+                        classifier = "cyclonedx"
+                        extension = "xml"
+                    }
+                }
         }
     }
 }
