@@ -32,7 +32,7 @@ plugins {
 
 afterEvaluate {
     project.plugins.withType<JavaPlugin> {
-        apply(plugin = "com.yelstream.topp.grasp.feature.spotbugs")
+        apply(plugin = "convention.spotbugs")
         apply(plugin = "com.yelstream.topp.grasp.feature.sonarqube")
 
         apply(plugin = "convention.lombok")

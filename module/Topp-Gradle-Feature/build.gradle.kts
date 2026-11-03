@@ -56,7 +56,7 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:6.2.5")
+    implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:6.5.13")
 //    implementation("com.github.spotbugs:spotbugs:4.9.8")
     implementation("org.sonarqube:org.sonarqube.gradle.plugin:7.5.0.8588")
     implementation("com.dorongold.task-tree:com.dorongold.task-tree.gradle.plugin:4.0.2")
