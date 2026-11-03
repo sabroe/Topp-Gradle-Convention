@@ -151,6 +151,16 @@ TODO:
 
                     addStringOption("Xmaxerrs", customString("javadoc.x.max-errs", "25"))
                     addStringOption("Xmaxwarns", customString("javadoc.x.max-warns", "25"))
+
+                    // Javadoc gets the same '--add-exports' as the compiler, e.g. for modules using 'jdk.compiler'
+                    // internals. Without them, Javadoc fails with "package com.sun.tools.javac.api is not visible".
+                    val compilerArgs = project.listProperty("java.compiler.default-args") +
+                        project.listProperty("java.compiler.module-specific-args")
+                    val addExports = compilerArgs.zipWithNext().filter { it.first == "--add-exports" }.map { it.second } +
+                        compilerArgs.filter { it.startsWith("--add-exports=") }.map { it.removePrefix("--add-exports=") }
+                    if (addExports.isNotEmpty()) {
+                        addMultilineStringsOption("-add-exports").value = addExports
+                    }
                 }
             }
         }

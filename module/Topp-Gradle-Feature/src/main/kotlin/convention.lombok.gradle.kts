@@ -144,10 +144,20 @@ project.plugins.withType<JavaPlugin> {
                     )
                 })
 
+                // Delombok compiles the sources again, without the compiler's module options, and repeats the
+                // compiler's warnings. Its errors, e.g. "package com.sun.tools.javac.api is not visible", don't stop
+                // the output from being written. So its messages go to a log file instead of the build log.
+                val logFile = layout.buildDirectory.file("delombok/delombok-main.log")
+                outputs.file(logFile).withPropertyName("log")
+
                 doFirst {
                     targetDir.get().asFile.deleteRecursively()  //Note: Removes files of deleted sources!
+                    val log = logFile.get().asFile
+                    log.parentFile.mkdirs()
+                    (this as JavaExec).errorOutput = log.outputStream()
                 }
                 doLast {
+                    (this as JavaExec).errorOutput.close()
                     sourceDirs.files.map { it.resolve("module-info.java") }.firstOrNull { it.isFile }?.let {
                         it.copyTo(targetDir.get().asFile.resolve("module-info.java"), overwrite = true)
                     }
