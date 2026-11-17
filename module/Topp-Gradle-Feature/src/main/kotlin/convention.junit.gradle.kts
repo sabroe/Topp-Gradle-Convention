@@ -65,8 +65,13 @@ project.plugins.withType<JavaPlugin> {
                 events("skipped","failed")
             }
 
+            //Note: Comma-separated patterns; unset keeps the defaults "*TestSuite" and "*Tests".
+            //Note: "*TestSuite" is the preferred convention style; suites select classes named "*Test".
+            //Note: "*Tests" is present to honor the typical Spring default, e.g. a generated "DemoApplicationTests".
+            //      A "*Tests" class must not be selected by a suite, or its tests run twice.
+            val includePatterns = project.findProperty("convention.${conventionName}.test.include-patterns")?.toString()?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }?.ifEmpty { null } ?: listOf("*TestSuite", "*Tests")
             filter {
-                includeTestsMatching("*TestSuite")
+                includePatterns.forEach { includeTestsMatching(it) }
             }
         }
     }

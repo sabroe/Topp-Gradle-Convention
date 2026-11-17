@@ -68,5 +68,10 @@ project.plugins.withType<JavaPlugin> {
                 testImplementation("org.slf4j:slf4j-simple:${slf4jVersion}")
             }
         }
+
+        //Note: Spring Boot brings its own SLF4J binding (Logback); slf4j-simple would compete with it.
+        pluginManager.withPlugin("org.springframework.boot") {
+            configurations.configureEach { exclude(group = "org.slf4j", module = "slf4j-simple") }
+        }
     }
 }
