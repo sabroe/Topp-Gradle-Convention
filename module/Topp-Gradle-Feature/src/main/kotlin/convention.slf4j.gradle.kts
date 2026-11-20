@@ -45,7 +45,7 @@ project.plugins.withType<JavaPlugin> {
         project.logger.debug("Convention ${conventionName} enabled.")
 
         dependencies {
-            val slf4jVersion = "2.0.17"
+            val slf4jVersion = "2.0.20"
 
             val apiExists = project.configurations.findByName("api") != null
             if (apiExists) {
